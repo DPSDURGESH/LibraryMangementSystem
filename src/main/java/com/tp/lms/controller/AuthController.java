@@ -189,7 +189,7 @@ public class AuthController {
 
 		if (staff != null) {
 
-			String token = tokenLogService.generateToken(staff.getId(), staff.getEmail());
+			//String token = tokenLogService.generateToken(staff.getId(), staff.getEmail());
 
 			UserDTO userDto = new UserDTO();
 			userDto.setFirstName(staff.getFirstName());

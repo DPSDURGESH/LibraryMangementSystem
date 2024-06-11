@@ -29,18 +29,13 @@ public class StudentController {
 	StudentService studentService;
 
 	Student student;
-	
+
 	@Autowired
 	TokenLogService tokenlogservice;
-	
-	
-	
-
-	
 
 	@GetMapping("")
 	public ResponseEntity<?> getStudent() {
-		
+
 		List<Student> students = studentService.getStudent();
 		if (students.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found");
@@ -50,7 +45,7 @@ public class StudentController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getStudentById(@PathVariable Integer id) {
-		
+
 		/*
 		 * if(!tokenlogservice.verifyToken(token)) { return
 		 * ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorised Access"
@@ -58,23 +53,23 @@ public class StudentController {
 		 * 
 		 * }
 		 */
-		
+
 		Optional<Student> studentById = studentService.getStudentById(id);
 		if (studentById.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student by id not found");
-			
+
 		} else {
 			Student student = studentById.get();
-			
+
 			return ResponseEntity.ok().body(student);
 		}
 	}
 
 	@PostMapping(" ")
-	public ResponseEntity<?> addStudent(@RequestBody Student student,@RequestParam  String token) {
-		if(!tokenlogservice.verifyToken(token)) {
+	public ResponseEntity<?> addStudent(@RequestBody Student student, @RequestParam String token) {
+		if (!tokenlogservice.verifyToken(token)) {
 			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorised Access");
-			
+
 		}
 
 		List<String> error = studentService.validate(student);
@@ -85,8 +80,6 @@ public class StudentController {
 		studentService.addStudent(student);
 		return ResponseEntity.ok().body("Student added successfully.");
 	}
-	
-	
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateStudent(@PathVariable Integer id, @RequestBody Student student) {
@@ -106,7 +99,6 @@ public class StudentController {
 		studentService.updateStudent(id, student);
 		return ResponseEntity.ok().body("Student with ID " + id + " updated successfully.");
 	}
-	
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteStudent(@PathVariable Integer id) {

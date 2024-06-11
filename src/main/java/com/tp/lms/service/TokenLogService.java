@@ -41,20 +41,35 @@ public class TokenLogService {
 		
 	}
 	
-	
+	public boolean isValidToken(String token) {
+        Optional<TokenLog> tokenLogOptional = tokenLogRepository.findByToken(token);
+
+        if (tokenLogOptional.isPresent()) {
+            TokenLog tokenLog = tokenLogOptional.get();
+            if (tokenLog.isValid()) {
+                LocalDateTime expiryTime = tokenLog.getExpiryTime();
+                return !isTokenExpired(expiryTime);
+            }
+        }
+        return false; // Token not found or invalid
+    }
+
+    private boolean isTokenExpired(LocalDateTime expiryTime) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return currentTime.isAfter(expiryTime);
+    }
 	
 
-		 public boolean isValidToken(String token) { Optional<TokenLog>
-	  tokenLogOptional = tokenLogRepository.findByToken(token);
-	 
-	  if (tokenLogOptional.isPresent())
-	  { TokenLog tokenLog = tokenLogOptional.get(); 
-	  if (tokenLog.isValid()) 
-	  { LocalDateTime expiryTime = tokenLog.getExpiryTime(); // Check if the token is not expired return
-	  !isTokenExpired(expiryTime);
-	  }
-	  } // Token not found or invalid return false;
-	  }
+	/*
+	 * public boolean isValidToken(String token) { Optional<TokenLog>
+	 * tokenLogOptional = tokenLogRepository.findByToken(token);
+	 * 
+	 * if (tokenLogOptional.isPresent()) { TokenLog tokenLog =
+	 * tokenLogOptional.get(); if (tokenLog.isValid()) { LocalDateTime expiryTime =
+	 * tokenLog.getExpiryTime(); // Check if the token is not expired return
+	 * !isTokenExpired(expiryTime); } } // Token not found or invalid return false;
+	 * }
+	 */
 	  
 	 
 	  
